@@ -1,7 +1,7 @@
 class GameData {
 
 	//静态实例，存在于类的本身而不存在类的实例上
-	public static unmapnum: number = 0;//空白地图元素
+	public static unmapnum: number = 0;//空白地图元素的总数
 	public static mapData: number[][];//地图数据
 	public static stepNum: number = 0;//当前关卡剩余步数
 	public static levelStepNum: number = 0;//当前关卡要求步数
@@ -13,7 +13,7 @@ class GameData {
 
 	public static MaxRow: number = 8; //最大行数
 	public static MaxColumn: number = 8; //最大列数
-	public static currentElementNum: number = 0 //当前可用元素数量，因为地图形状是可变的
+	public static currentElementNum: number = 0 //当前可用元素数量
 
 	public static init() {
 		GameData.mapData = [];
@@ -21,11 +21,12 @@ class GameData {
 		for (let i = 0; i < GameData.MaxRow; i++) {
 			let arr: number[] = [];
 			for (let t = 0; t < GameData.MaxColumn; t++) {
-				GameData.mapData[t].push(-2)//设定-2表示当前地图是空的，可以使用， -1则是地图不能使用
+				arr.push(-2)
 			}
+			GameData.mapData.push(arr)//设定-2表示当前地图是空的，可以使用， -1则是地图不能使用
 		};
 		GameData.levelReq = new LevelRequire();
-		GameData.elements = []; //游戏元素
+		GameData.elements = []; //游戏的小消除元素
 		GameData.unusedElements = [] //未使用游戏元素
 		let len: number = GameData.MaxRow * GameData.MaxColumn; //最大的元素数量
 		for (let q = 0; q < len; q++) {

@@ -1,18 +1,18 @@
 class PropView extends egret.Sprite {
-	public constructor() {
+	public constructor(type: number) {
 		super();
 		this._type = type;
 		this.init();
 	}
 
 	//道具元素界面
-	private _view_box: egret.Bitmap;
-	private _view_activate: egret.Bitmap;
-	private _numText: egret.BitmapText;
-	private _type: number = -1;
-	public id: number = -1;
+	private _view_box: egret.Bitmap;//道具盒子
+	private _view_activate: egret.Bitmap;//激活道具图像
+	private _numText: egret.TextField;//可用道具数量
+	private _type: number = -1;//道具类型
+	public id: number = -1;//道具id
 
-	public get proptype(): number {
+	public get proptype(): number { //返回道具类型
 		return this._type;
 	}
 
@@ -24,11 +24,15 @@ class PropView extends egret.Sprite {
 		this.addChild(this._numText);
 		this.setActivateState(true);
 	}
+	//设置道具的可用数量
 	private createNumText() {
-		this._numText = new egret.BitmapText();
-		this._numText.font = RES.getRes("number_fnt");
+		this._numText = new egret.TextField();
 		this._numText.x = this._view_activate.width - 31;
+		this._numText.textColor = 0xff0000;
+		this._numText.size = 40
 	}
+
+	//
 	private createView() {
 		let _interval: number = 15;
 		let _width: number = (GameData.stageW - _interval * 6) / 5;
@@ -49,9 +53,17 @@ class PropView extends egret.Sprite {
 	}
 
 	private _num: number = 0//数量
+
+	/**
+	 * 获取各个道具的可使用数量
+	 */
 	public get num(): number {
 		return this._num;
 	}
+
+	/**
+	 * 设置道具的数量
+	 */
 	public set num(val: number) {
 		this._num = val;
 		this._numText.text = val.toString();
@@ -63,20 +75,22 @@ class PropView extends egret.Sprite {
 		}
 	}
 
+	/**
+	 * @val 是否为可激活状态，激活状态调用彩色图片
+	 */
 	private setActivateState(val: boolean) {
 		this.touchEnabled = val;
 		if (val) {
-			this._view_activate.texture = RES.getRes(this.getActivateTexture(this._type));
+			this._view_activate.texture = RES.getRes(this.getActivateTexture(this._type));//彩色图片
 			this._view_box.texture = RES.getRes("propbox_png");
-			this._numText.font = RES.getRes("number_fnt");
 		}
 		else {
-			this._view_activate.texture = RES.getRes(this.getDisableTexture(this._type))
+			this._view_activate.texture = RES.getRes(this.getDisableTexture(this._type))//灰色图片
 			this._view_box.texture = RES.getRes("propboxdisable_png");
-			this._numText.font = RES.getRes("numberdisable_fnt");
 		}
 	}
 
+	//可使用状态时是彩色图片
 	private getActivateTexture(type: number): string {
 		let textureRename: string = "";
 		switch (type) {
@@ -84,38 +98,41 @@ class PropView extends egret.Sprite {
 				break;
 			case 1: textureRename = "zhadan_png";
 				break;
-			case 0: textureRename = "zhenghang_png";
+			case 2: textureRename = "zhenghang_png";
 				break;
-			case 0: textureRename = "zhenglie_png";
+			case 3: textureRename = "zhenglie_png";
 				break;
-			case 0: textureRename = "chanzi_png";
+			case 4: textureRename = "chanzi_png";
 				break;
 
 		}
 		return textureRename
 	}
+	/**
+	 * 道具数量小于0时图片为灰色的
+	 */
 	private getDisableTexture(type: number): string {
 		let textureRename: string = "";
 		switch (type) {
-			case 0: textureRename = "tongsedisble_png";
+			case 0: textureRename = "tongsedisable_png";
 				break;
-			case 1: textureRename = "zhadandisble_png";
+			case 1: textureRename = "zhadandisable_png";
 				break;
-			case 0: textureRename = "zhenghangdisble_png";
+			case 2: textureRename = "zhenghangdisable_png";
 				break;
-			case 0: textureRename = "zhengliedisble_png";
+			case 3: textureRename = "zhengliedisable_png";
 				break;
-			case 0: textureRename = "chanzidisble_png";
+			case 4: textureRename = "chanzidisable_png";
 				break;
 
 		}
 		return textureRename
 	}
-	public setFocus(val:boolean){
-		if(val){
-			this._view_box.texture=RES.getRes("propboxactive_png")
-		}else{
-			this._view_box.texture=RES.getRes("propbox_png")
+	public setFocus(val: boolean) {
+		if (val) {
+			this._view_box.texture = RES.getRes("propboxactive_png")
+		} else {
+			this._view_box.texture = RES.getRes("propbox_png")
 		}
 	}
 }

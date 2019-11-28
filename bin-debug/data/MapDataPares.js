@@ -4,6 +4,9 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 var MapDataPares = (function () {
     function MapDataPares() {
     }
+    /**
+     * @val:number[]：关卡json中的map数组，map存放的是不可用的location
+     */
     MapDataPares.createdMapData = function (val) {
         var len = val.length;
         GameData.unmapnum = len; //地图未使用元素数量

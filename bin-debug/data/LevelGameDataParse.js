@@ -7,7 +7,7 @@ var LevelGameDataParse = (function () {
     LevelGameDataParse.parseLevelGameData = function (val) {
         GameData.stepNum = val.step; //关卡步数
         GameData.levelStepNum = val.step; //剩余可用步数
-        GameData.elementTypes = val.element; //关卡出现的元素类型
+        GameData.elementTypes = val.element; //关卡要求的过关条件元素类型
         GameData.levelBackgroundImageName = val.levelBgImg;
         LevelGameDataParse.parseLevelRequire(val.levelreq);
     };
@@ -15,7 +15,7 @@ var LevelGameDataParse = (function () {
         GameData.levelReq.openChange(); //openchange将原有数据清空，重新赋值
         var len = val.length;
         for (var i = 0; i < len; i++) {
-            GameData.levelReq.addElement(val[i].type, val[i].num); //循环添加游戏元素
+            GameData.levelReq.addElement(val[i].type, val[i].num); //循环添加过关条件游戏元素
         }
     };
     return LevelGameDataParse;

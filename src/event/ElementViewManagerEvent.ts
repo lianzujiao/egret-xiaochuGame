@@ -6,8 +6,8 @@ class ElementViewManagerEvent extends egret.Event {
 	public static USE_PROP_CLICK:string="use_prop_click";
 
 	public propElementLocation:number=0;//携带道具点击的元素位置
-	public ele1:number=0//第一个点击的元素
-	public ele2:number=0//第二个点击的元素
+	public ele1:number=0//第一个点击的元素的id
+	public ele2:number=0//第二个点击的元素的id
 	public constructor(type:string,buble:boolean=false,cancellable=false) {
 		super(type,buble,cancellable);
 	}

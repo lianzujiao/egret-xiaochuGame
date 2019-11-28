@@ -1,12 +1,31 @@
 {
-    "map":[],
-    "step":10,//可使用步数
-    "element":[0,1,2,3,4,5],//会出现哪些游戏元素,
-    "levelreq":[
-        {"type":3,"num":6},
-        {"type":4,"num":3},
-        {"type":0,"num":2},
-        {"type":2,"num":2}
+    "map": [0,1,7,6],
+    "step": 15,
+    "element": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
     ],
-    "levelBgImg":"background"
+    "levelreq": [
+        {
+            "type": 3,
+            "num": 8
+        },
+        {
+            "type": 4,
+            "num": 6
+        },
+        {
+            "type": 0,
+            "num": 7
+        },
+        {
+            "type": 2,
+            "num": 4
+        }
+    ],
+    "levelBgImg": "HHC_bg_png"
 }

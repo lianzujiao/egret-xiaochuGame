@@ -1,109 +1,94 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
+/**
+ *
+ * @author
+ *
+ */
 var PropLogic = (function () {
     function PropLogic() {
     }
     /**
-     * 道具使用判断
-     * @proptype 道具类型
-     * @elLoc 点击的元素的location
+     * protype:当前道具类型
+     * ellocation 使用道具后点击的第一个消除元素
      */
-    PropLogic.useProp = function (propType, elLoc) {
-        switch (propType) {
+    PropLogic.useProp = function (proptype, ellocation) {
+        switch (proptype) {
             case 0:
-                PropLogic.removeType(elLoc);
+                PropLogic.tongse(ellocation);
                 break;
             case 1:
-                PropLogic.removeRound(elLoc);
+                PropLogic.zhadan(ellocation);
                 break;
             case 2:
-                PropLogic.removeRow(elLoc);
+                PropLogic.zhenghang(ellocation);
                 break;
             case 3:
-                PropLogic.removeCol(elLoc);
+                PropLogic.zhenglie(ellocation);
                 break;
             case 4:
-                PropLogic.removeOne(elLoc);
+                PropLogic.chanzi(ellocation);
                 break;
         }
     };
-    /**
-     * 消除同类型
-     * @location 点击元素的Location(0~63)
-     */
-    PropLogic.removeType = function (location) {
+    PropLogic.tongse = function (loc) {
         LinkLogic.lines = [];
-        var arr = [];
-        var type = GameData.elements[GameData.mapData[Math.floor(location / 8)][location % 8]].type;
+        var type = GameData.elements[GameData.mapData[Math.floor(loc / 8)][loc % 8]].type;
         for (var i = 0; i < GameData.MaxRow; i++) {
             for (var t = 0; t < GameData.MaxColumn; t++) {
                 if (GameData.mapData[i][t] != -1 && GameData.elements[GameData.mapData[i][t]].type == type) {
-                    arr.push(GameData.mapData[i][t]);
+                    LinkLogic.pushLines(GameData.mapData[i][t]);
                 }
             }
         }
-        LinkLogic.lines.push(arr);
     };
-    /**
-     * 消除一周
-     */
-    PropLogic.removeRound = function (location) {
+    PropLogic.zhadan = function (loc) {
         LinkLogic.lines = [];
-        var i = Math.floor(location / 8);
-        var t = location % 8;
-        var arr = [];
-        arr.push(GameData.elements[GameData[i][t]].id);
-        if (i > 0 && GameData[i - 1][t] != -1) {
-            arr.push(GameData.elements[GameData[i - 1][t]].id);
+        var i = Math.floor(loc / 8);
+        var t = loc % 8;
+        LinkLogic.pushLines(GameData.elements[GameData.mapData[i][t]].id);
+        //上
+        if (i > 0 && GameData.mapData[i - 1][t] != -1) {
+            LinkLogic.pushLines(GameData.elements[GameData.mapData[i - 1][t]].id);
         }
+        //下
         if (i < (GameData.MaxRow - 1) && GameData.mapData[i + 1][t] != -1) {
-            arr.push(GameData.elements[GameData[i + 1][t]].id);
+            LinkLogic.pushLines(GameData.elements[GameData.mapData[i + 1][t]].id);
         }
-        if (t > 0 && GameData[i][t - 1] != -1) {
-            arr.push(GameData.elements[GameData[i][t - 1]].id);
+        //左
+        if (t > 0 && GameData.mapData[i][t - 1] != -1) {
+            LinkLogic.pushLines(GameData.elements[GameData.mapData[i][t - 1]].id);
         }
+        //右
         if (t < (GameData.MaxColumn - 1) && GameData.mapData[i][t + 1] != -1) {
-            arr.push(GameData.elements[GameData[i][t + 1]].id);
+            LinkLogic.pushLines(GameData.elements[GameData.mapData[i][t + 1]].id);
         }
-        LinkLogic.lines.push(arr);
+        //LinkLogic.lines.push(arr);
     };
-    /**
-     * 消除一行
-     */
-    PropLogic.removeRow = function (location) {
+    PropLogic.zhenghang = function (loc) {
         LinkLogic.lines = [];
-        var rowIndex = Math.floor(location / 8);
-        var arr = [];
+        var i = Math.floor(loc / 8);
+        //var arr: number[] = [];
         for (var t = 0; t < GameData.MaxColumn; t++) {
-            if (GameData.mapData[rowIndex][t] != -1) {
-                console.log(rowIndex, t);
-                arr.push(GameData.elements[GameData.mapData[rowIndex][t]].id);
-            }
+            if (GameData.mapData[i][t] != -1)
+                LinkLogic.pushLines(GameData.elements[GameData.mapData[i][t]].id);
         }
-        LinkLogic.lines.push(arr);
+        //LinkLogic.lines.push(arr);
     };
-    /**
-     * 消除一列
-     */
-    PropLogic.removeCol = function (location) {
+    PropLogic.zhenglie = function (loc) {
         LinkLogic.lines = [];
-        var colIndex = location % 8;
-        var arr = [];
+        var t = loc % 8;
+        //var arr: number[] = [];
         for (var i = 0; i < GameData.MaxRow; i++) {
-            if (GameData.mapData[i][colIndex] != -1) {
-                console.log(i, colIndex);
-                arr.push(GameData.elements[GameData.mapData[i][colIndex]].id);
-            }
+            if (GameData.mapData[i][t] != -1)
+                LinkLogic.pushLines(GameData.elements[GameData.mapData[i][t]].id);
         }
-        LinkLogic.lines.push(arr);
+        //LinkLogic.lines.push(arr);
     };
-    /**
-     * 消除单个
-     */
-    PropLogic.removeOne = function (location) {
+    PropLogic.chanzi = function (loc) {
         LinkLogic.lines = [];
-        LinkLogic.lines.push([GameData.elements[GameData.mapData[Math.floor(location / 8)][location % 8]].id]);
+        LinkLogic.pushLines(GameData.elements[GameData.mapData[Math.floor(loc / 8)][loc % 8]].id);
     };
     return PropLogic;
 }());

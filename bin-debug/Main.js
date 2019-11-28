@@ -75,6 +75,8 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
+        _this.Music = new LoadMusic();
+        //.Event.ADDED_TO_STAGE 将事件添加到舞台显示列表中调度
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -120,6 +122,9 @@ var Main = (function (_super) {
             });
         });
     };
+    /**
+     * 加载资源文件
+     */
     Main.prototype.loadResource = function () {
         return __awaiter(this, void 0, void 0, function () {
             var loadingView, e_1;
@@ -156,50 +161,17 @@ var Main = (function (_super) {
      * Create a game scene
      */
     Main.prototype.createGameScene = function () {
-        //游戏第一帧背景图片
-        var sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
-        var stageW = this.stage.stageWidth;
-        var stageH = this.stage.stageHeight;
-        sky.width = stageW;
-        sky.height = stageH;
-        var topMask = new egret.Shape();
-        topMask.graphics.beginFill(0x000000, 0.5);
-        topMask.graphics.drawRect(0, 0, stageW, 172); //矩形左上角起点和x轴和y轴的高度
-        topMask.graphics.endFill();
-        topMask.y = 33;
-        this.addChild(topMask);
-        var icon = this.createBitmapByName("egret_icon_png");
-        this.addChild(icon);
-        icon.x = 26;
-        icon.y = 33;
-        var line = new egret.Shape();
-        line.graphics.lineStyle(2, 0xffffff);
-        line.graphics.moveTo(0, 0);
-        line.graphics.lineTo(0, 117);
-        line.graphics.endFill();
-        line.x = 172;
-        line.y = 61;
-        this.addChild(line);
-        var colorLabel = new egret.TextField();
-        colorLabel.textColor = 0xffffff;
-        colorLabel.width = stageW - 172;
-        colorLabel.textAlign = "center";
-        colorLabel.text = "Hello Egret";
-        colorLabel.size = 24;
-        colorLabel.x = 172;
-        colorLabel.y = 80;
-        this.addChild(colorLabel);
-        var textfield = new egret.TextField();
-        this.addChild(textfield);
-        textfield.alpha = 0;
-        textfield.width = stageW - 172;
-        textfield.textAlign = egret.HorizontalAlign.CENTER;
-        textfield.size = 24;
-        textfield.textColor = 0xffffff;
-        textfield.x = 172;
-        textfield.y = 135;
-        this.textfield = textfield;
+        this.createGameRuning();
+        var sound = RES.getRes("BgMusic_mp3");
+        sound.play();
+    };
+    Main.prototype.createGameRuning = function () {
+        var gameLayer = new egret.Sprite();
+        this._gl = new GameLogic(gameLayer);
+        this.addChild(gameLayer);
+    };
+    Main.prototype.plsyMusic = function () {
+        this.Music.playMusic();
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
@@ -217,7 +189,7 @@ var Main = (function (_super) {
      */
     Main.prototype.startAnimation = function (result) {
         var _this = this;
-        var parser = new egret.HtmlTextParser();
+        var parser = new egret.HtmlTextParser(); //使用parser方法格式化html格式的文本
         var textflowArr = result.map(function (text) { return parser.parse(text); });
         var textfield = this.textfield;
         var count = -1;
@@ -230,10 +202,15 @@ var Main = (function (_super) {
             // 切换描述内容
             // Switch to described content
             textfield.textFlow = textFlow;
+            //egret.Tween.get(this) 为指定对象添加动画
             var tw = egret.Tween.get(textfield);
+            //to()将指定属性修改为指定值
             tw.to({ "alpha": 1 }, 200);
+            //wait()延迟时间
             tw.wait(2000);
+            //
             tw.to({ "alpha": 0 }, 200);
+            //回调函数
             tw.call(change, _this);
         };
         change();

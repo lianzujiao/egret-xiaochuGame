@@ -1,4 +1,7 @@
 class MapDataPares { //解析json中的地图数组
+	/**
+	 * @val:number[]：关卡json中的map数组，map存放的是不可用的location
+	 */
 	public static createdMapData(val:number[]):void{
 		let len:number=val.length;
 		GameData.unmapnum=len; //地图未使用元素数量

@@ -4,6 +4,9 @@ class MapControl {
 	public createElementAllMap() {
 		this.createAllMap()
 	}
+	/**
+	 * 随机创建number个元素
+	 */
 	public createElements(num: number): string[] {
 		var types: string[] = [];
 		for (let i = 0; i < num; i++) {
@@ -12,71 +15,66 @@ class MapControl {
 		return types;
 	}
 
+	/**
+	 * 根据指定id随机创建一个元素
+	 */
 	public createTypeById(id: number) {
 		GameData.elements[id].type = this.createType()
 	}
 
-	public updateMapLocation() {
-		let ids: number[] = [];
-		let len: number = LinkLogic.lines.length;
-		for (let i = 0; i < len; i++) {
-			var l: number = LinkLogic.lines[i].length;
-			for (let t = 0; t < l; t++) {
-				var rel: boolean = false;
-				var ll: number = ids.length;
-				for (let r = 0; r < ll; r++) {
-					if (ids[r] == LinkLogic.lines[i][t]) {
-						rel = true;
-					}
-				}
-				if (!rel) {
-					this.createTypeById(LinkLogic.lines[i][t]);
-					ids.push(LinkLogic.lines[i][t])
-				}
-			}
-		}
-		len = ids.length;
-		var colarr: number[] = [];
-		for (let i = 0; i < len; i++) {
-			rel = false;
-			for (let t = 0; t < colarr.length; t++) {
-				if (colarr[t] == GameData.elements[ids[i]].location % GameData.MaxColumn) {
-					return true
-				}
-			}
-			if (!rel) {
-				colarr.push(GameData.elements[ids[i]].location % GameData.MaxColumn);
-			}
-		}
-
-		var colElementIds: number[];
-		len = colarr.length;
-		for (let i = 0; i < len; i++) {
-			var newColIds: number[] = [];
-			var removeColIds: number[] = [];
-			for (let t = GameData.MaxRow - 1; t >= 0; t--) {
-				rel = false;
-				for (var q = 0; q < ids.length; q++) {
-					removeColIds.push(ids[q])
-					rel = true;
-				}
-				if (!rel) {
-					if (GameData.mapData[t][colarr[i]] != -1) {
-						newColIds.push(GameData.mapData[t][colarr[i]]);
-					}
-				}
-			}
-			newColIds = newColIds.concat(removeColIds)
-			for (let t = GameData.MaxRow - 1; t >= 0; t--) {
-				if (GameData.mapData[t][colarr[i]] != -1) {
-					GameData.mapData[t][colarr[i]]=newColIds[0];
-					GameData.elements[newColIds[0]].location=t*GameData.MaxRow+colarr[i]
-					newColIds.shift()
-				}
-			}
-		}
+		public updateMapLocation(){
+	    var ids:number[]=[];
+	    var len:number=LinkLogic.lines.length;
+	    for(var i=0;i<len;i++){
+	        //var l:number=LinkLogic.lines[i].length;            
+            ids.push(LinkLogic.lines[i]);            	   
+	    }
+	    
+	    len = ids.length;
+	    var colarr:number[]=[];
+	    for(i=0;i<len;i++){
+    	      
+            var tempCol: number = GameData.elements[ids[i]].location % GameData.MaxColumn;
+            if(colarr.indexOf(tempCol)==-1){
+                colarr.push(tempCol);
+            }
+	    }
+	    
+	    var colelids:number[];
+	    len = colarr.length;
+	    for(i=0;i<len;i++){
+	        var newcolids:number[]=[];
+	        var removeids:number[]=[];
+	        for(var t=GameData.MaxRow-1;t>=0;t--){
+	            //console.log(ids);
+	            if(ids.indexOf(GameData.mapData[t][colarr[i]])>=0){
+                    removeids.push(GameData.mapData[t][colarr[i]]);
+                    
+	            }else{
+                    if(GameData.mapData[t][colarr[i]] != -1) {
+                        newcolids.push(GameData.mapData[t][colarr[i]]);
+                    }
+	            }
+	        }
+	        newcolids=newcolids.concat(removeids);
+	        //console.log(newcolids);
+	        for(t=GameData.MaxRow-1;t>=0;t--){
+	            if(GameData.mapData[t][colarr[i]]!=-1){
+    	              var newcol:number = newcolids.shift();
+	                GameData.mapData[t][colarr[i]]=newcol;
+                    // console.log(GameData.elements[newcol].location);
+                    GameData.elements[newcol].location=t*GameData.MaxRow+colarr[i];
+	            
+	            }
+	        }
+	        
+	        for(t=0;t<removeids.length;t++){
+	            this.createTypeById(removeids[t]);
+	        }
+    	       
+	        
+	    }
 	}
-
 	private createAllMap() {
 		let len: number = GameData.MaxRow * GameData.MaxColumn;
 		let type: string = "";
@@ -87,7 +85,7 @@ class MapControl {
 		for (var i = 0; i < GameData.MaxRow; i++) {
 			for (var t = 0; t < GameData.MaxColumn; t++) {
 				while (haveLink) {
-					type = this.createType();
+					type = this.createType();//随机获取一个当前关卡元素类型
 					if (i > 1 && GameData.mapData[i - 1][t] != -1 && GameData.mapData[i - 2][t] != -1) {
 						if (GameData.elements[GameData.mapData[i - 1][t]].type == GameData.elements[GameData.mapData[i - 2][t]].type) {
 							ztype = GameData.elements[GameData.mapData[i - 1][t]].type;
@@ -115,7 +113,10 @@ class MapControl {
 		}
 	}
 
+	/**
+	 * return 任意一个元素类型
+	 */
 	private createType() {
-		return GameData.elementTypes[Math.floor(Math.random() * GameData.elementTypes.length)].toString()
+		return GameData.elementTypes[Math.floor(Math.random() * GameData.elementTypes.length)].toString()//随机数的值是0~元素类型数组长度
 	}
 }

@@ -11,16 +11,28 @@
 	],
 	"game": [
 		"bin-debug/data/element/BaseElement.js",
-		"bin-debug/data/LinkLogic.js",
+		"bin-debug/data/element/LevelRequireElement.js",
 		"bin-debug/Platform.js",
 		"bin-debug/data/GameData.js",
 		"bin-debug/data/LevelGameDataParse.js",
 		"bin-debug/data/LevelRequire.js",
-		"bin-debug/Main.js",
+		"bin-debug/data/LinkLogic.js",
+		"bin-debug/data/MapControl.js",
 		"bin-debug/data/MapDataPares.js",
 		"bin-debug/data/PropLogic.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/data/element/GameElement.js",
-		"bin-debug/data/element/LevelRequireElement.js"
+		"bin-debug/Main.js",
+		"bin-debug/event/ElementViewManagerEvent.js",
+		"bin-debug/view/ElementView.js",
+		"bin-debug/view/ElementViewManager.js",
+		"bin-debug/view/GameBackground.js",
+		"bin-debug/view/GameLogic.js",
+		"bin-debug/view/GameOverPanel.js",
+		"bin-debug/view/LevelElementView.js",
+		"bin-debug/view/LevelReqViewManager.js",
+		"bin-debug/view/LoadMusic.js",
+		"bin-debug/view/PropView.js",
+		"bin-debug/view/PropViewManager.js"
 	]
 }

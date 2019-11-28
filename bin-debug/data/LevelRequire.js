@@ -6,7 +6,7 @@ var LevelRequire = (function () {
         this.requireElements = [];
     }
     /**
-     * 获取关卡总数
+     * 获取关卡过关条件数据
      */
     LevelRequire.prototype.getLevelReqNum = function () {
         return this.requireElements.length;
@@ -15,7 +15,7 @@ var LevelRequire = (function () {
      * 添加关卡元素
      */
     LevelRequire.prototype.addElement = function (type, num) {
-        var ele = new LevelRequireElement(); //每一个游戏关卡
+        var ele = new LevelRequireElement(); //每一个游戏过关条件
         ele.num = num;
         ele.type = type;
         this.requireElements.push(ele);
@@ -27,10 +27,10 @@ var LevelRequire = (function () {
         this.requireElements = [];
     };
     LevelRequire.prototype.changeReqNum = function (type, num) {
-        var len = this.getLevelReqNum(); //关卡元素数组长度
+        var len = this.getLevelReqNum(); //过关条件元素数组
         for (var i = 0; i < len; i++) {
-            if (this.requireElements[i].type = type) {
-                this.requireElements[i].num -= num; //未破解关卡逐渐减少
+            if (this.requireElements[i].type == type) {
+                this.requireElements[i].num -= num; //关卡指定过关条件元素的数量减一
                 return;
             }
         }
@@ -45,6 +45,7 @@ var LevelRequire = (function () {
                 return false;
             }
         }
+        console.log("过关！");
         return true;
     };
     return LevelRequire;
